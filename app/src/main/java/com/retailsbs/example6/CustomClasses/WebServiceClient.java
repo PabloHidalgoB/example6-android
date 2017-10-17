@@ -62,11 +62,12 @@ public class WebServiceClient extends AsyncTask<Context, Void, JSONObject> {
         // default values
         sRequestMethod = "POST";
 
-        sUrlBase = "http://api.fixer.io/latest";
+        sUrlBase = "http://www.floatrates.com/daily/usd.json";
 
     }
 
     public void getCurrency() {
+        sRequestMethod = "GET";
         Log.d(activity.TAG, "=========> getCurrency");
         //String parameters = "{\"email\":\"" + user.trim() + "\", \"password\":\"" + password.trim() + "\"}";
 
