@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Example6</string>
+    <string name="message_connecting">Espere porfavor</string>
+
+    <string name="url_dev">/PresupuestariaMovilServiceWAR/PresupuestariaMovilServlet</string>
+    <string name="url_prod">/PresupuestariaPos/PresupuestariaMovilServlet</string>
+
+    <string name="message_not_net_connection">No estas conectado a internet</string>
+    <string name="message_error_connection_to_server">No fue posible conectarse al servidor, por favor intenta más tarde</string>
+    <string name="message_error_on_server">Ocurrió un error en el servidor, por favor intenta más tarde</string>
+
+    <string name="message_generic_title">Atención</string>
+    <string name="text_button_ok">OK</string>
+    <string name="text_button_cancel">Cancelar</string>
+
+
+</resources>
