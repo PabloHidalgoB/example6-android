@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context="com.retailsbs.example6.Activities.MainActivity">
@@ -24,37 +23,55 @@
             android:id="@+id/txt_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"/>
-
-        <Spinner
-            android:id="@+id/spn_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:inputType="numberDecimal" />
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Convertir a" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="15dp">
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spn_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.45" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:background="@mipmap/ic_keyboard_arrow_right_black_24dp" />
 
         <Spinner
             android:id="@+id/spn_convert"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.45" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_convert"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:text="Convertir" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="Cambiar valores" />
+
+        <Button
+            android:id="@+id/btn_convert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:text="Convertir" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,9 +90,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Esperando datos..." />
-
-
     </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/lstv_todayCurrency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dividerHeight="1dp"
+        android:divider="@color/divider">
+
+    </ListView>
 
 
 </LinearLayout>

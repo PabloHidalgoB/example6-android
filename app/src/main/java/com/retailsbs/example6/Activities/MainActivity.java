@@ -1,23 +1,24 @@
 package com.retailsbs.example6.Activities;
 
-import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.retailsbs.example6.Adapters.TodayCurrencyAdapter;
 import com.retailsbs.example6.CustomClasses.CurrencyPDB;
 import com.retailsbs.example6.CustomClasses.LibraryUtilities;
 import com.retailsbs.example6.CustomClasses.RequestInterface;
 import com.retailsbs.example6.CustomClasses.WebServiceClient;
 import com.retailsbs.example6.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +32,8 @@ public class MainActivity extends RootActivity implements RequestInterface {
     public RootActivity mRoot;
 
     private Button mConvert;
+    private Button mSwitch;
+
     private EditText mInputValue;
     private TextView mOutputValue;
 
@@ -40,7 +43,10 @@ public class MainActivity extends RootActivity implements RequestInterface {
     private ArrayList<CurrencyPDB> mList = new ArrayList<>();
     private ArrayList<String> mAdapter = new ArrayList<String>();
 
-    private static final String TAG = "Example6";
+    private TodayCurrencyAdapter mTodayCurrencyAdapter;
+    private ListView mListView;
+
+
     private static final String WSC_GET_RELATED_PRODUCT = "wsc_get_related_product";
 
     @Override
@@ -48,7 +54,11 @@ public class MainActivity extends RootActivity implements RequestInterface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setTitle("Convertidor de Monedas via JSON");
+
         mConvert = (Button) findViewById(R.id.btn_convert);
+        mSwitch = (Button) findViewById(R.id.btn_switch);
+
         mInputValue = (EditText) findViewById(R.id.txt_input);
         mOutputValue = (TextView) findViewById(R.id.txt_value);
 
@@ -56,14 +66,22 @@ public class MainActivity extends RootActivity implements RequestInterface {
         mCurrencyOutput = (Spinner) findViewById(R.id.spn_convert);
 
 
-        //SweetAlertDialog mSpinnerDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        //mSpinnerDialog.setTitleText(getString(R.string.message_connecting));
-        //mSpinnerDialog.setCancelable(false);
-        WebServiceClient request = new WebServiceClient(MainActivity.this, MainActivity.this, null, WSC_GET_RELATED_PRODUCT);
+        mListView = (ListView) findViewById(R.id.lstv_todayCurrency);
+
+
+        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#448AFF"));
+        pDialog.setTitleText("Cargando datos");
+        pDialog.setCancelable(false);
+        WebServiceClient request = new WebServiceClient(MainActivity.this, MainActivity.this, pDialog, WSC_GET_RELATED_PRODUCT);
         request.getCurrency();
         request.execute();
-        //mSpinnerDialog.show();
+        pDialog.show();
 
+        //load();
+
+
+        //TODO encontrar forma de automaticamente encontrar valores de dolar, euro, libra, etc
 
 
 
@@ -71,16 +89,57 @@ public class MainActivity extends RootActivity implements RequestInterface {
             @Override
             public void onClick(View view) {
 
-                mInputValue.getText();
-                mList.get(mCurrencyInput.getSelectedItemPosition()).getmRate();
-                mList.get(mCurrencyOutput.getSelectedItemPosition()).getmRate();
+                Double a = 0.0;
 
+                Double semiFinal;
+                Double finalValue;
 
-                //mOutputValue.setText(); TODO setear valor en base al valor ingresado multiplicado por el rate de la moneda pedida
+                String text = mInputValue.getText().toString();
+                Double b = mList.get(mCurrencyInput.getSelectedItemPosition()).getmRate();
+                Double c = mList.get(mCurrencyOutput.getSelectedItemPosition()).getmRate();
+
+                Log.d("Text Input", mInputValue.getText().toString());
+                Log.d("Currency Input", mList.get(mCurrencyInput.getSelectedItemPosition()).getmRate().toString());
+                Log.d("Currency Output", mList.get(mCurrencyOutput.getSelectedItemPosition()).getmRate().toString());
+
+                if(!text.isEmpty())
+                    try
+                    {
+                        a = Double.parseDouble(text);
+                        // it means it is double
+                    } catch (Exception e1) {
+                        // this means it is not double
+                        e1.printStackTrace();
+                    }
+
+                semiFinal = ((a*c)/b);
+
+                finalValue = Math.round( semiFinal * 100.0 ) / 100.0;
+
+                Log.d("Result", String.valueOf(finalValue));
+
+                mOutputValue.setText(String.valueOf(finalValue)); //TODO setear valor en base al valor ingresado multiplicado por el rate de la moneda pedida
 
             }
         });
 
+        mSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int spinner1Index = mCurrencyInput.getSelectedItemPosition();
+
+                mCurrencyInput.setSelection(mCurrencyOutput.getSelectedItemPosition());
+                mCurrencyOutput.setSelection(spinner1Index);
+            }
+        });
+    }
+
+    private void load() {
+
+        Parcelable mParcelable = mListView.onSaveInstanceState();
+        mTodayCurrencyAdapter = new TodayCurrencyAdapter(mRoot, R.layout.row_todaycurrency, null); //TODO setear parametros correctos
+        mListView.setAdapter(mTodayCurrencyAdapter);
+        mListView.onRestoreInstanceState(mParcelable);
     }
 
 

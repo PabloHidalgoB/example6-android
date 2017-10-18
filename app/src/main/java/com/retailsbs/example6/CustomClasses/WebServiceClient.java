@@ -53,8 +53,8 @@ public class WebServiceClient extends AsyncTask<Context, Void, JSONObject> {
     public boolean success = true;
     public JSONObject data;
 
-    public WebServiceClient(RootActivity activity, RequestInterface activityReply, SweetAlertDialog mSpinnerDialog, String tag) {
-        this.mSpinnerDialog = mSpinnerDialog;
+    public WebServiceClient(RootActivity activity, RequestInterface activityReply, SweetAlertDialog pDialog, String tag) {
+        this.mSpinnerDialog = pDialog;
         this.activity = activity;
         this.TAG = tag;
         this.activityReply = activityReply;
@@ -62,7 +62,7 @@ public class WebServiceClient extends AsyncTask<Context, Void, JSONObject> {
         // default values
         sRequestMethod = "POST";
 
-        sUrlBase = "http://www.floatrates.com/daily/usd.json";
+        sUrlBase = "http://www.floatrates.com/daily/ils.json";
 
     }
 

@@ -13,6 +13,35 @@ public class CurrencyPDB {
     private Double mRate;
     private String mDate;
 
+    private int mImagen;
+    private String mMoneda;
+    private String mValor;
+
+
+    public String getmMoneda() {
+        return mMoneda;
+    }
+
+    public void setmMoneda(String mMoneda) {
+        this.mMoneda = mMoneda;
+    }
+
+    public String getmValor() {
+        return mValor;
+    }
+
+    public void setmValor(String mValor) {
+        this.mValor = mValor;
+    }
+
+    public int getmImagen() {
+        return mImagen;
+    }
+
+    public void setmImagen(int mImagen) {
+        this.mImagen = mImagen;
+    }
+
     public String getmCode() {
         return mCode;
     }
