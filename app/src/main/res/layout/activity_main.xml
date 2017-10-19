@@ -83,13 +83,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="10dp"
-            android:text="El valor es:" />
+            android:text="El valor es:"
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/txt_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Esperando datos..." />
+            android:text="Esperando datos..."
+            android:textSize="20dp" />
     </LinearLayout>
 
 
@@ -97,8 +99,8 @@
         android:id="@+id/lstv_todayCurrency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dividerHeight="1dp"
-        android:divider="@color/divider">
+        android:divider="@color/divider"
+        android:dividerHeight="1dp">
 
     </ListView>
 

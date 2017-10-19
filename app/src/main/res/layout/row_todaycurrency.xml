@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:paddingTop="20dp"
         android:text="El dolar hoy esta a:"
         android:textSize="20dp" />
 
@@ -28,9 +28,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_currencyToday"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="$662.25"
-        android:textSize="75dp" />
+        android:textSize="60dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txt_currencyValue"
+        android:layout_alignBottom="@+id/txt_currencyValue"
+        android:layout_toEndOf="@+id/txt_currencyValue"
+        android:text="CLP"
+        android:textSize="20dp" />
 
 
 </RelativeLayout>

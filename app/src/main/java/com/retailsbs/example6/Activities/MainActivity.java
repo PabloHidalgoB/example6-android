@@ -1,5 +1,6 @@
 package com.retailsbs.example6.Activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -29,7 +30,9 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends RootActivity implements RequestInterface {
 
-    public RootActivity mRoot;
+    private
+    Double clpRate = 0.0;
+
 
     private Button mConvert;
     private Button mSwitch;
@@ -41,10 +44,16 @@ public class MainActivity extends RootActivity implements RequestInterface {
     private Spinner mCurrencyOutput;
 
     private ArrayList<CurrencyPDB> mList = new ArrayList<>();
+    private ArrayList<CurrencyPDB> mListAux = new ArrayList<>();
+
+
     private ArrayList<String> mAdapter = new ArrayList<String>();
 
     private TodayCurrencyAdapter mTodayCurrencyAdapter;
     private ListView mListView;
+
+    private ArrayList<Integer> mListBills;
+    private ArrayList<String> mCurrencyToday;
 
 
     private static final String WSC_GET_RELATED_PRODUCT = "wsc_get_related_product";
@@ -78,7 +87,25 @@ public class MainActivity extends RootActivity implements RequestInterface {
         request.execute();
         pDialog.show();
 
-        //load();
+
+        mListBills = new ArrayList<>();
+        mListBills.clear();
+        mListBills.add(R.mipmap.usdollar);
+        mListBills.add(R.mipmap.europeaneuro);
+        mListBills.add(R.mipmap.ukpound);
+        mListBills.add(R.mipmap.japaneseyen);
+        mListBills.add(R.mipmap.canadadollar);
+        mListBills.add(R.mipmap.polishzloty);
+
+        mCurrencyToday = new ArrayList<>();
+        mCurrencyToday.clear();
+        mCurrencyToday.add("El Dólar hoy esta a:");
+        mCurrencyToday.add("El Euro hoy esta a:");
+        mCurrencyToday.add("La Libra Esterlina hoy esta a:");
+        mCurrencyToday.add("El Yen hoy esta a:");
+        mCurrencyToday.add("El Dólar Canadiense hoy esta a:");
+        mCurrencyToday.add("El Zloty Polaco hoy esta a:");
+
 
 
         //TODO encontrar forma de automaticamente encontrar valores de dolar, euro, libra, etc
@@ -98,9 +125,9 @@ public class MainActivity extends RootActivity implements RequestInterface {
                 Double b = mList.get(mCurrencyInput.getSelectedItemPosition()).getmRate();
                 Double c = mList.get(mCurrencyOutput.getSelectedItemPosition()).getmRate();
 
-                Log.d("Text Input", mInputValue.getText().toString());
-                Log.d("Currency Input", mList.get(mCurrencyInput.getSelectedItemPosition()).getmRate().toString());
-                Log.d("Currency Output", mList.get(mCurrencyOutput.getSelectedItemPosition()).getmRate().toString());
+                //Log.d("Text Input", mInputValue.getText().toString());
+                //Log.d("Currency Input", mList.get(mCurrencyInput.getSelectedItemPosition()).getmRate().toString());
+                //Log.d("Currency Output", mList.get(mCurrencyOutput.getSelectedItemPosition()).getmRate().toString());
 
                 if(!text.isEmpty())
                     try
@@ -116,7 +143,7 @@ public class MainActivity extends RootActivity implements RequestInterface {
 
                 finalValue = Math.round( semiFinal * 100.0 ) / 100.0;
 
-                Log.d("Result", String.valueOf(finalValue));
+                //Log.d("Result", String.valueOf(finalValue));
 
                 mOutputValue.setText(String.valueOf(finalValue)); //TODO setear valor en base al valor ingresado multiplicado por el rate de la moneda pedida
 
@@ -137,7 +164,7 @@ public class MainActivity extends RootActivity implements RequestInterface {
     private void load() {
 
         Parcelable mParcelable = mListView.onSaveInstanceState();
-        mTodayCurrencyAdapter = new TodayCurrencyAdapter(mRoot, R.layout.row_todaycurrency, null); //TODO setear parametros correctos
+        mTodayCurrencyAdapter = new TodayCurrencyAdapter(MainActivity.this, R.layout.row_todaycurrency, mListBills, mCurrencyToday, mListAux, clpRate); //TODO setear parametros correctos
         mListView.setAdapter(mTodayCurrencyAdapter);
         mListView.onRestoreInstanceState(mParcelable);
     }
@@ -151,7 +178,7 @@ public class MainActivity extends RootActivity implements RequestInterface {
             else {
                 try {
                     JSONObject jsonObject = new JSONObject(request.data.toString());
-                    Log.d("TAG", jsonObject.toString());
+                    //Log.d("TAG", jsonObject.toString());
 
                     mList.clear();
 
@@ -168,17 +195,20 @@ public class MainActivity extends RootActivity implements RequestInterface {
                         mCurrencyPDB.setmRate(jsonObjectY.getDouble("rate"));
                         mCurrencyPDB.setmDate(jsonObjectY.getString("date"));
 
-                        Log.d("CODE", jsonObjectY.getString("code"));
-                        Log.d("CODE", jsonObjectY.getString("alphaCode"));
-                        Log.d("CODE", jsonObjectY.getString("numericCode"));
-                        Log.d("CODE", jsonObjectY.getString("name"));
-                        Log.d("CODE", jsonObjectY.getString("rate"));
-                        Log.d("CODE", jsonObjectY.getString("date"));
+                        //Log.d("CODE", jsonObjectY.getString("code"));
+                        //Log.d("CODE", jsonObjectY.getString("alphaCode"));
+                        //Log.d("CODE", jsonObjectY.getString("numericCode"));
+                        //Log.d("CODE", jsonObjectY.getString("name"));
+                        //Log.d("CODE", jsonObjectY.getString("rate"));
+                        //Log.d("CODE", jsonObjectY.getString("date"));
 
                         mList.add(mCurrencyPDB);
                     }
 
                     loadData();
+                    getCurrencies();
+                    load();
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -195,5 +225,56 @@ public class MainActivity extends RootActivity implements RequestInterface {
         }
         mCurrencyInput.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, mAdapter));
         mCurrencyOutput.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, mAdapter));
+    }
+
+    private void getCurrencies(){
+
+        mListAux.clear();
+
+
+        for ( int x = 0; x < mList.size(); x++){
+
+            if ((mList.get(x).getmCode().contentEquals("USD")))
+            {
+                mListAux.add(mList.get(x));
+
+            } else if ((mList.get(x).getmCode().contentEquals("EUR"))){
+
+                mListAux.add(mList.get(x));
+
+
+            } else if ((mList.get(x).getmCode().contentEquals("GBP"))){
+
+                mListAux.add(mList.get(x));
+
+
+            } else if ((mList.get(x).getmCode().contentEquals("JPY"))){
+
+                mListAux.add(mList.get(x));
+
+
+            } else if ((mList.get(x).getmCode().contentEquals("CAD"))){
+
+                mListAux.add(mList.get(x));
+
+            } else if ((mList.get(x).getmCode().contentEquals("PLN"))){
+
+                mListAux.add(mList.get(x));
+
+            } else if ((mList.get(x).getmCode().contentEquals("CLP"))){
+
+                clpRate = mList.get(x).getmRate();
+
+            }
+
+        }
+
+        for ( int x = 0; x < mListAux.size(); x++) {
+
+            Log.d("TEST CURRENCY ACQUIRED", mListAux.get(x).getmCode());
+
+            mListAux.get(x).getmRate();
+        }
+
     }
 }
