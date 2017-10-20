@@ -1,11 +1,12 @@
 package com.retailsbs.example6.Activities;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +25,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.Iterator;
+import java.util.Locale;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -90,63 +93,24 @@ public class MainActivity extends RootActivity implements RequestInterface {
 
         mListBills = new ArrayList<>();
         mListBills.clear();
-        mListBills.add(R.mipmap.usdollar);
-        mListBills.add(R.mipmap.europeaneuro);
-        mListBills.add(R.mipmap.ukpound);
-        mListBills.add(R.mipmap.japaneseyen);
-        mListBills.add(R.mipmap.canadadollar);
-        mListBills.add(R.mipmap.polishzloty);
 
         mCurrencyToday = new ArrayList<>();
         mCurrencyToday.clear();
-        mCurrencyToday.add("El Dólar hoy esta a:");
-        mCurrencyToday.add("El Euro hoy esta a:");
-        mCurrencyToday.add("La Libra Esterlina hoy esta a:");
-        mCurrencyToday.add("El Yen hoy esta a:");
-        mCurrencyToday.add("El Dólar Canadiense hoy esta a:");
-        mCurrencyToday.add("El Zloty Polaco hoy esta a:");
-
-
-
-        //TODO encontrar forma de automaticamente encontrar valores de dolar, euro, libra, etc
-
 
 
         mConvert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                doConvert();
+            }
+        });
 
-                Double a = 0.0;
-
-                Double semiFinal;
-                Double finalValue;
-
-                String text = mInputValue.getText().toString();
-                Double b = mList.get(mCurrencyInput.getSelectedItemPosition()).getmRate();
-                Double c = mList.get(mCurrencyOutput.getSelectedItemPosition()).getmRate();
-
-                //Log.d("Text Input", mInputValue.getText().toString());
-                //Log.d("Currency Input", mList.get(mCurrencyInput.getSelectedItemPosition()).getmRate().toString());
-                //Log.d("Currency Output", mList.get(mCurrencyOutput.getSelectedItemPosition()).getmRate().toString());
-
-                if(!text.isEmpty())
-                    try
-                    {
-                        a = Double.parseDouble(text);
-                        // it means it is double
-                    } catch (Exception e1) {
-                        // this means it is not double
-                        e1.printStackTrace();
-                    }
-
-                semiFinal = ((a*c)/b);
-
-                finalValue = Math.round( semiFinal * 100.0 ) / 100.0;
-
-                //Log.d("Result", String.valueOf(finalValue));
-
-                mOutputValue.setText(String.valueOf(finalValue)); //TODO setear valor en base al valor ingresado multiplicado por el rate de la moneda pedida
-
+        mInputValue.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    doConvert();
+                }
+                return false;
             }
         });
 
@@ -178,7 +142,6 @@ public class MainActivity extends RootActivity implements RequestInterface {
             else {
                 try {
                     JSONObject jsonObject = new JSONObject(request.data.toString());
-                    //Log.d("TAG", jsonObject.toString());
 
                     mList.clear();
 
@@ -195,20 +158,12 @@ public class MainActivity extends RootActivity implements RequestInterface {
                         mCurrencyPDB.setmRate(jsonObjectY.getDouble("rate"));
                         mCurrencyPDB.setmDate(jsonObjectY.getString("date"));
 
-                        //Log.d("CODE", jsonObjectY.getString("code"));
-                        //Log.d("CODE", jsonObjectY.getString("alphaCode"));
-                        //Log.d("CODE", jsonObjectY.getString("numericCode"));
-                        //Log.d("CODE", jsonObjectY.getString("name"));
-                        //Log.d("CODE", jsonObjectY.getString("rate"));
-                        //Log.d("CODE", jsonObjectY.getString("date"));
-
                         mList.add(mCurrencyPDB);
                     }
 
                     loadData();
                     getCurrencies();
                     load();
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -231,50 +186,80 @@ public class MainActivity extends RootActivity implements RequestInterface {
 
         mListAux.clear();
 
-
         for ( int x = 0; x < mList.size(); x++){
 
             if ((mList.get(x).getmCode().contentEquals("USD")))
             {
                 mListAux.add(mList.get(x));
+                mCurrencyToday.add("El Dólar hoy esta a:");
+                mListBills.add(R.mipmap.usdollar);
 
             } else if ((mList.get(x).getmCode().contentEquals("EUR"))){
 
                 mListAux.add(mList.get(x));
-
+                mCurrencyToday.add("El Euro hoy esta a:");
+                mListBills.add(R.mipmap.europeaneuro);
 
             } else if ((mList.get(x).getmCode().contentEquals("GBP"))){
 
                 mListAux.add(mList.get(x));
-
+                mCurrencyToday.add("La Libra Esterlina hoy esta a:");
+                mListBills.add(R.mipmap.ukpound);
 
             } else if ((mList.get(x).getmCode().contentEquals("JPY"))){
 
                 mListAux.add(mList.get(x));
-
+                mCurrencyToday.add("El Yen hoy esta a:");
+                mListBills.add(R.mipmap.japaneseyen);
 
             } else if ((mList.get(x).getmCode().contentEquals("CAD"))){
 
                 mListAux.add(mList.get(x));
+                mCurrencyToday.add("El Dólar Canadiense hoy esta a:");
+                mListBills.add(R.mipmap.canadadollar);
 
             } else if ((mList.get(x).getmCode().contentEquals("PLN"))){
 
                 mListAux.add(mList.get(x));
+                mCurrencyToday.add("El Zloty Polaco hoy esta a:");
+                mListBills.add(R.mipmap.polishzloty);
 
             } else if ((mList.get(x).getmCode().contentEquals("CLP"))){
 
                 clpRate = mList.get(x).getmRate();
+                mCurrencyInput.setSelection(x);
+            }
+        }
+    }
 
+    private void doConvert(){
+        Double a = 0.0;
+
+        Double semiFinal;
+        Double finalValue;
+
+        String text = mInputValue.getText().toString();
+        Double b = mList.get(mCurrencyInput.getSelectedItemPosition()).getmRate();
+        Double c = mList.get(mCurrencyOutput.getSelectedItemPosition()).getmRate();
+
+        if(!text.isEmpty())
+            try
+            {
+                a = Double.parseDouble(text);
+                // it means it is double
+            } catch (Exception e1) {
+                // this means it is not double
+                e1.printStackTrace();
             }
 
-        }
+        semiFinal = ((a*c)/b);
+        finalValue = Math.round( semiFinal * 100.0 ) / 100.0;
 
-        for ( int x = 0; x < mListAux.size(); x++) {
+        StringBuilder sb = new StringBuilder();
+        Locale spanish = new Locale("es", "ES");
+        Formatter formatter = new Formatter(sb, spanish);
+        formatter.format("$ %(,.2f", finalValue);
 
-            Log.d("TEST CURRENCY ACQUIRED", mListAux.get(x).getmCode());
-
-            mListAux.get(x).getmRate();
-        }
-
+        mOutputValue.setText(String.valueOf(formatter));
     }
 }

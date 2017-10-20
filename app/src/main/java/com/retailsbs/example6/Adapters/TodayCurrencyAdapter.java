@@ -55,7 +55,6 @@ public class TodayCurrencyAdapter extends ArrayAdapter<Integer> {
 
 
         if (mView == null){
-            // si el objeto mView es igual a nulo se infla (cargar en mamoria) para ser visualizada
             LayoutInflater vI = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mView = vI.inflate(R.layout.row_todaycurrency, parent, false);
         }
