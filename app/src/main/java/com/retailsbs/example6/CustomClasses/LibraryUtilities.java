@@ -42,7 +42,7 @@ public class LibraryUtilities {
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        activity.hideKeyboard(activity);
+                        activity.hideKeyboard();
                     }
                 });
             }

@@ -6,7 +6,9 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -123,6 +125,8 @@ public class MainActivity extends RootActivity implements RequestInterface {
                 mCurrencyOutput.setSelection(spinner1Index);
             }
         });
+
+        hideKeyboard();
     }
 
     private void load() {
@@ -164,6 +168,7 @@ public class MainActivity extends RootActivity implements RequestInterface {
                     loadData();
                     getCurrencies();
                     load();
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -262,4 +267,6 @@ public class MainActivity extends RootActivity implements RequestInterface {
 
         mOutputValue.setText(String.valueOf(formatter));
     }
+
+
 }
