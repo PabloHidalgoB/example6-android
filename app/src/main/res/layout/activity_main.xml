@@ -8,16 +8,18 @@
     android:padding="20dp"
     tools:context="com.retailsbs.example6.Activities.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ingrese Valor y tipo de moneda" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingrese Valor y tipo de moneda" />
 
         <EditText
             android:id="@+id/txt_input"
