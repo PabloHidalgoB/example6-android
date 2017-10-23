@@ -8,8 +8,6 @@
     android:padding="20dp"
     tools:context="com.retailsbs.example6.Activities.MainActivity">
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
