@@ -35,9 +35,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends RootActivity implements RequestInterface {
 
-    private
-    Double clpRate = 0.0;
-
+    private Double clpRate = 0.0;
 
     private Button mConvert;
     private Button mSwitch;
