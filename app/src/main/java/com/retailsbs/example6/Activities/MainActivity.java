@@ -167,6 +167,9 @@ public class MainActivity extends RootActivity implements RequestInterface {
                     getCurrencies();
                     load();
 
+                    new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("Datos obtenidos correctamente")
+                            .show();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
